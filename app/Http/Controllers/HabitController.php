@@ -63,6 +63,17 @@ class HabitController extends Controller
         return redirect()->route('habits.index')->with('status', 'Habit deleted.');
     }
 
+    public function checkIn(Habit $habit)
+    {
+        $this->authorizeHabit($habit);
+
+        $habit->logs()->firstOrCreate([
+            'completed_on' => today()->toDateString(),
+        ]);
+
+        return redirect()->route('habits.index')->with('status', 'Checked in for today.');
+    }
+    
     private function authorizeHabit(Habit $habit): void
     {
         abort_if($habit->user_id !== auth()->id(), 403);

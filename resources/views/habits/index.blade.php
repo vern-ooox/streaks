@@ -24,13 +24,30 @@
                         @if ($habit->description)
                             <div class="text-sm text-gray-600">{{ $habit->description }}</div>
                         @endif
+                        <div class="text-sm text-gray-500 mt-1">
+                            {{ __('Current streak:') }} {{ $habit->currentStreak() }} {{ __('day(s)') }}
+                        </div>
                     </div>
+
+                    @if ($habit->doneToday())
+                        <span class="text-sm font-medium text-green-600">{{ __('Done today') }}</span>
+                    @else
+                        <form method="POST" action="{{ route('habits.check-in', $habit) }}">
+                            @csrf
+                            <x-primary-button>{{ __('Done today') }}</x-primary-button>
+                        </form>
+                    @endif
+
                     <a href="{{ route('habits.edit', $habit) }}" class="text-sm text-indigo-600 underline">{{ __('Edit') }}</a>
                     <form method="POST" action="{{ route('habits.destroy', $habit) }}" onsubmit="return confirm('Delete this habit?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="text-sm text-red-600 underline">{{ __('Delete') }}</button>
                     </form>
+                </div>
+            @empty
+                <div class="bg-white shadow-sm sm:rounded-lg p-6 text-gray-600">
+                    {{ __('No habits yet. Create your first one.') }}
                 </div>
             @endforelse
         </div>
