@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class HabitLog extends Model
+{
+    protected $fillable = ['habit_id', 'completed_on'];
+
+    protected $casts = ['completed_on' => 'date'];
+}
